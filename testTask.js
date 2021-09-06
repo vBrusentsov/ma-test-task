@@ -13,7 +13,7 @@ function mainArray(array) {
   );
   return newArray;
 }
-function watermelonQuantity(array) {
+function getWatermelonQuantity(array) {
   const filterWatermelon = array
     .filter((product) => product.item === 'watermelon')
     .reduce((accumulator, quantityItem) => accumulator + quantityItem.quantity, 0);
@@ -25,13 +25,17 @@ function getAppleWeight(array) {
     .reduce((accumulator, weightItem) => accumulator + weightItem.weight, 0);
   return filterApples;
 }
-
+function getSortGoods(array) {
+  const sortProducts = array.sort((a, b) => a.item.localeCompare(b.item));
+  return sortProducts;
+}
 const finalyResult = mainArray(goodsArray);
-// const we
-const appleWeight = getAppleWeight(finalyResult);
-
-console.log(`Apples - ${appleWeight}`);
-console.log(watermelonQuantity(finalyResult));
+// const watermelonQuantity = getWatermelonQuantity(finalyResult);
+// const appleWeight = getAppleWeight(finalyResult);
+const sortGoods = getSortGoods(finalyResult);
+console.log(sortGoods);
+// console.log(`Apples - ${appleWeight}`);
+// console.log(`watermelon - ${watermelonQuantity}`);
 
 // console.log(finalyResult);
 // console.log(watermelonQuntity(finalyResult));
