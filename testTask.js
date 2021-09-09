@@ -25,17 +25,42 @@ function getAppleWeight(array) {
     .reduce((accumulator, weightItem) => accumulator + weightItem.weight, 0);
   return filterApples;
 }
-function getSortGoods(array) {
+function getSortItemGoods(array) {
   const sortProducts = array.sort((a, b) => a.item.localeCompare(b.item));
   return sortProducts;
 }
-const finalyResult = mainArray(goodsArray);
-// const watermelonQuantity = getWatermelonQuantity(finalyResult);
-// const appleWeight = getAppleWeight(finalyResult);
-const sortGoods = getSortGoods(finalyResult);
-console.log(sortGoods);
-// console.log(`Apples - ${appleWeight}`);
-// console.log(`watermelon - ${watermelonQuantity}`);
+function sortGoodsByCost(array) {
+  const sortProducts = array.sort((firstItem, secondItem) => {
+    const firstCost = firstItem.weight ? firstItem.weight * firstItem.pricePerKilo : firstItem.quantity * firstItem.pricePerItem;
+    const secondCost = secondItem.weight ? secondItem.weight * secondItem.pricePerKilo : secondItem.quantity * secondItem.pricePerItem;
+    return firstCost - secondCost;
+  });
+  return sortProducts;
+}
+function getLeastCostOrange(array) {
+  const filterOrange = array.filter((product) => product.item === 'orange');
+  let leastPrice = null;
+  let leastProduct = null;
+  filterOrange.forEach((product) => {
+    const numRelease = product.pricePerKilo.replace(',', '.').slice(1) * product.weight;
 
-// console.log(finalyResult);
-// console.log(watermelonQuntity(finalyResult));
+    if (leastPrice === null || leastPrice > numRelease) {
+      leastPrice = numRelease;
+      leastProduct = product;
+    }
+  });
+  return leastProduct;
+}
+
+const finalyResult = mainArray(goodsArray);
+const watermelonQuantity = getWatermelonQuantity(finalyResult);
+const appleWeight = getAppleWeight(finalyResult);
+const sortItemGoods = getSortItemGoods(finalyResult);
+const sortCostProducts = sortGoodsByCost(finalyResult);
+const typeOrangePrice = getLeastCostOrange(finalyResult);
+console.log(sortItemGoods);
+console.log(sortCostProducts);
+console.log(`Apples - ${appleWeight}`);
+console.log(`watermelon - ${watermelonQuantity}`);
+console.log(typeOrangePrice);
+console.log(finalyResult);
