@@ -14,28 +14,24 @@ function mainArray(array) {
   return newArray;
 }
 function getWatermelonQuantity(array) {
-  const filterWatermelon = array
+  return array
     .filter((product) => product.item === 'watermelon')
     .reduce((accumulator, quantityItem) => accumulator + quantityItem.quantity, 0);
-  return filterWatermelon;
 }
 function getAppleWeight(array) {
-  const filterApples = array
-    .filter((product) => product.item === 'apple')
-    .reduce((accumulator, weightItem) => accumulator + weightItem.weight, 0);
-  return filterApples;
+  return array.filter((product) => product.item === 'apple').reduce((accumulator, weightItem) => accumulator + weightItem.weight, 0);
 }
-function getSortItemGoods(array) {
-  const sortProducts = array.sort((a, b) => a.item.localeCompare(b.item));
-  return sortProducts;
+function getSortByAlphbetical(array) {
+  return [...array].sort((a, b) => a.item.localeCompare(b.item));
 }
 function sortGoodsByCost(array) {
-  const sortProducts = array.sort((firstItem, secondItem) => {
-    const firstCost = firstItem.weight ? firstItem.weight * firstItem.pricePerKilo : firstItem.quantity * firstItem.pricePerItem;
-    const secondCost = secondItem.weight ? secondItem.weight * secondItem.pricePerKilo : secondItem.quantity * secondItem.pricePerItem;
+  return [...array].sort((firstItem, secondItem) => {
+    const firstItemPrice = +(firstItem.pricePerKilo || firstItem.pricePerItem).slice(1).replace(',', '.');
+    const secondItemPrice = +(secondItem.pricePerKilo || secondItem.pricePerItem).slice(1).replace(',', '.');
+    const firstCost = firstItem.weight ? firstItem.weight * firstItemPrice : firstItem.quantity * firstItemPrice;
+    const secondCost = secondItem.weight ? secondItem.weight * secondItemPrice : secondItem.quantity * secondItemPrice;
     return firstCost - secondCost;
   });
-  return sortProducts;
 }
 function getLeastCostOrange(array) {
   const filterOrange = array.filter((product) => product.item === 'orange');
@@ -49,18 +45,33 @@ function getLeastCostOrange(array) {
       leastProduct = product;
     }
   });
+
   return leastProduct;
+}
+
+function getCostGoodsByItem(array) {
+  const totalCostGoods = {};
+
+  array.forEach((product) => {
+    totalCostGoods[product.item] =
+      (totalCostGoods[product.item] || 0) + +(product.pricePerItem || product.pricePerKilo).slice(1).replace(',', '.');
+  });
+
+  return totalCostGoods;
 }
 
 const finalyResult = mainArray(goodsArray);
 const watermelonQuantity = getWatermelonQuantity(finalyResult);
 const appleWeight = getAppleWeight(finalyResult);
-const sortItemGoods = getSortItemGoods(finalyResult);
+const sortItemGoods = getSortByAlphbetical(finalyResult);
 const sortCostProducts = sortGoodsByCost(finalyResult);
-const typeOrangePrice = getLeastCostOrange(finalyResult);
-console.log(sortItemGoods);
-console.log(sortCostProducts);
+const leastOrangePrice = getLeastCostOrange(finalyResult);
+const costGoods = getCostGoodsByItem(finalyResult);
+
+console.log('sorted goods by alphabetical', sortItemGoods);
+console.log('sortet goods by cost', sortCostProducts);
 console.log(`Apples - ${appleWeight}`);
 console.log(`watermelon - ${watermelonQuantity}`);
-console.log(typeOrangePrice);
+console.log('least orange price', leastOrangePrice);
 console.log(finalyResult);
+console.log('cost goods by item', costGoods);
